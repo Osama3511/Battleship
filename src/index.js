@@ -1,3 +1,2 @@
 import "./styles.css";
-
-console.log("hello");
+import { GameBoard } from "./gameBoard";
