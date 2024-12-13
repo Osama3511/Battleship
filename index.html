@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Battleship Game</title>
+  <script defer src="main.js"></script></head>
+  <body>
+    <header>
+      <h1>Battleship Game</h1>
+      <p class="instructions">Place your ships and prepare for battle!</p>
+    </header>
+
+    <main>
+      <div class="board-container">
+        <section class="player-section">
+          <h2>Your Board</h2>
+          <div class="playerBoardDiv"></div>
+          <button class="refresh-player-board">Refresh Board</button>
+        </section>
+
+        <div class="overlay">
+            <div class="win-popup">
+              <div class="popup-content">
+                <h2 class="winner-message">Player Wins!</h2>
+                <button class="restart-game">Restart</button>
+              </div>
+            </div>
+        </div>
+
+        <section class="computer-section">
+          <h2>Opponent's Board</h2>
+          <div class="computerBoardDiv"></div>
+          <button class="start-game">Start</button>
+        </section>
+      </div>
+    </main>
+
+
+    <footer>
+      <p>&copy; 2024 Battleship Game. All rights reserved.</p>
+    </footer>
+  </body>
+</html>
