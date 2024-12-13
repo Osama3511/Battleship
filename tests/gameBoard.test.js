@@ -1,5 +1,5 @@
-const { GameBoard } = require("../src/scripts/gameBoard");
-const { Ship } = require("../src/scripts/ship");
+// const { GameBoard } = require("../src/scripts/gameBoard");
+// const { Ship } = require("../src/scripts/ship");
 
 describe("GameBoard", () => {
   let gameBoard;
@@ -70,7 +70,7 @@ describe("GameBoard", () => {
   });
 
   test("recieve attack miss", () => {
-    expect(gameBoard.recieveAttack(1, 1)).toBeFalsy();
+    expect(gameBoard.recieveAttack(1, 1)).toBeTruthy();
   });
 
   test("recieve attack hit", () => {

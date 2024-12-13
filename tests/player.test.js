@@ -1,5 +1,5 @@
-const { experiments } = require("webpack");
-const { Player } = require("../src/scripts/player");
+// const { experiments } = require("webpack");
+// const { Player } = require("../src/scripts/player");
 
 describe("Player", () => {
   let player;

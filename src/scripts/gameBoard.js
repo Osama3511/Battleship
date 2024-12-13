@@ -26,7 +26,7 @@ export function GameBoard() {
     if (!target) {
       console.log("You missed!");
       board[y][x] = "miss";
-      return false;
+      return true;
     }
 
     if (typeof target === "object") {
@@ -42,6 +42,7 @@ export function GameBoard() {
     }
 
     console.log("You already attacked this coordinate!");
+    return false;
   };
 
   const getBoard = () => board;

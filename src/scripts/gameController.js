@@ -11,8 +11,10 @@ export function GameController() {
 
   const printBoards = () => {
     const playerBoard = JSON.parse(JSON.stringify(playerGameBoard.getBoard()));
-    const computerBoard = JSON.parse(JSON.stringify(computerGameBoard.getBoard()));
-  
+    const computerBoard = JSON.parse(
+      JSON.stringify(computerGameBoard.getBoard())
+    );
+
     console.log(playerBoard);
     console.log(computerBoard);
   };
@@ -28,9 +30,7 @@ export function GameController() {
   placePlayerShips();
 
   const placeComputerShips = () => {
-    for (let i = 0; i < 5; i++) {
-      computer.placeOwnShip();
-    }
+    computer.placeOwnShip();
   };
 
   placeComputerShips();
@@ -44,10 +44,10 @@ export function GameController() {
     placePlayerShips();
 
     printBoards();
-  }
+  };
 
   const playRound = (x, y) => {
-    player.attack(x, y, computerGameBoard);
+    if(!player.attack(x, y, computerGameBoard)) return;
 
     if (checkGameOver(computerGameBoard)) {
       printBoards();
@@ -68,8 +68,14 @@ export function GameController() {
     printBoards();
   };
 
+  const getBoards = () => {
+    return { playerBoard: playerGameBoard, computerBoard: computerGameBoard };
+  };
+
+
   return {
     playRound,
     resetGame,
+    getBoards,
   };
 }

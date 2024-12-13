@@ -1,6 +1,7 @@
 import { GameBoard } from "./gameBoard";
 import { checkAvailableSpot } from "./helperFunctions";
 import { Ship } from "./ship";
+
 export function Computer() {
   const board = GameBoard();
 
@@ -10,38 +11,59 @@ export function Computer() {
 
   const placeOwnShip = () => {
     const newShips = ships.slice();
-    let placed = false;
-    while (!placed) {
-      let x = Math.floor(Math.random() * 10);
-      let y = Math.floor(Math.random() * 10);
+    let shipCount = newShips.length;
 
-      let shipIndex = Math.floor(Math.random() * 5);
-      let ship = newShips[shipIndex];
+    while (shipCount) {
+      let placed = false;
 
-      let direction = directions[Math.floor(Math.random() * 2)];
+      while (!placed) {
+        let x = Math.floor(Math.random() * 10);
+        let y = Math.floor(Math.random() * 10);
 
-      if (checkAvailableSpot(board.getBoard(), x, y, ship.getLength(), direction)) {
-        board.placeShip(x, y, ships[shipIndex], direction);
-        newShips.splice(shipIndex, 1);
-        placed = true;
+        let shipIndex = Math.floor(Math.random() * shipCount);
+        let ship = newShips[shipIndex];
+
+        let direction = directions[Math.floor(Math.random() * directions.length)];
+
+        if (
+          checkAvailableSpot(
+            board.getBoard(),
+            x,
+            y,
+            ship.getLength(),
+            direction
+          )
+        ) {
+          board.placeShip(x, y, newShips[shipIndex], direction);
+          newShips.splice(shipIndex, 1);
+          shipCount = shipCount - 1;
+          placed = true;
+        }
       }
     }
   };
 
   const attack = (board) => {
-    const x = Math.floor(Math.random() * 10);
-    const y = Math.floor(Math.random() * 10);
+    const arrayBoard = board.getBoard();
+    let attacked = false;
+    while (!attacked) {
+      const x = Math.floor(Math.random() * 10);
+      const y = Math.floor(Math.random() * 10);
 
-    board.recieveAttack(x, y);
+      if (arrayBoard[y][x] === null || typeof arrayBoard[y][x] === "object") {
+        board.recieveAttack(x, y);
+        attacked = true;
+      }
+    }
   };
 
   const resetBoard = () => {
     board.forEach((row, rowIndex) => {
       row.forEach((col, colIndex) => {
         board[rowIndex][colIndex] = null;
-      })
+      });
     });
-  }
+  };
 
   const getOwnGameBoard = () => board;
   return {
