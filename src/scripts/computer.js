@@ -1,49 +1,10 @@
-import { GameBoard } from "./gameBoard";
-import { checkAvailableSpot } from "./helperFunctions";
-import { Ship } from "./ship";
+import { Player } from "./player";
 
 export function Computer() {
-  const board = GameBoard();
+  const computer = Player();
 
-  const directions = ["horizontal", "vertical"];
-
-  const ships = [Ship(5), Ship(4), Ship(3), Ship(3), Ship(2)];
-
-  const placeOwnShip = () => {
-    const newShips = ships.slice();
-    let shipCount = newShips.length;
-
-    while (shipCount) {
-      let placed = false;
-
-      while (!placed) {
-        let x = Math.floor(Math.random() * 10);
-        let y = Math.floor(Math.random() * 10);
-
-        let shipIndex = Math.floor(Math.random() * shipCount);
-        let ship = newShips[shipIndex];
-
-        let direction = directions[Math.floor(Math.random() * directions.length)];
-
-        if (
-          checkAvailableSpot(
-            board.getBoard(),
-            x,
-            y,
-            ship.getLength(),
-            direction
-          )
-        ) {
-          board.placeShip(x, y, newShips[shipIndex], direction);
-          newShips.splice(shipIndex, 1);
-          shipCount = shipCount - 1;
-          placed = true;
-        }
-      }
-    }
-  };
-
-  const attack = (board) => {
+  // Override attack method
+  computer.attack = (board) => {
     const arrayBoard = board.getBoard();
     let attacked = false;
     while (!attacked) {
@@ -57,19 +18,5 @@ export function Computer() {
     }
   };
 
-  const resetBoard = () => {
-    board.forEach((row, rowIndex) => {
-      row.forEach((col, colIndex) => {
-        board[rowIndex][colIndex] = null;
-      });
-    });
-  };
-
-  const getOwnGameBoard = () => board;
-  return {
-    placeOwnShip,
-    attack,
-    getOwnGameBoard,
-    resetBoard,
-  };
+  return computer;
 }

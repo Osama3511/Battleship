@@ -1,4 +1,7 @@
-import { screenController } from "./scripts/screenController";
 import "./styles.css";
+import { screenController } from "./scripts/screenController";
+function main() {
+    screenController();
+}
 
-const game = screenController();
+main();

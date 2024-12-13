@@ -38,9 +38,13 @@ export function checkGameOver(gameBoard) {
 
   for(const row of board) {
     for(const cell of row) {
-      if(typeof cell === 'object') return false;
+      if(typeof cell === 'object' && cell !== null) return false;
      }
   }
   
   return true;
+}
+
+export function getRandomFromRange(range) {
+  return Math.floor(Math.random() * range);
 }

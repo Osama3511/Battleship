@@ -1,56 +1,16 @@
 import { GameController } from "./gameController";
+import { updateComputerBoard } from "./loadComputerBoard";
+import { updatePlayerBoard } from "./loadPlayerBoard";
+import { showPopup, hidePopup } from "./popup";
 
 export function screenController() {
   const game = GameController();
-
-  const playerBoardDiv = document.querySelector(".playerBoardDiv");
   const computerBoardDiv = document.querySelector(".computerBoardDiv");
+  let gameStarted = false;
 
   const updateBoards = () => {
-    const updatePlayerBoard = () => {
-      playerBoardDiv.textContent = "";
-      const board = game.getBoards().playerBoard.getBoard();
-
-      board.forEach((row, rowIndex) => {
-        row.forEach((col, colIndex) => {
-          const colButton = document.createElement("button");
-          colButton.classList.add("cell");
-
-          colButton.dataset.row = rowIndex;
-          colButton.dataset.column = colIndex;
-
-          colButton.textContent = col === "hit" ? "X" : "O";
-          if (!col) colButton.textContent = "";
-
-          if (typeof col === "object" && col !== null) {
-            colButton.classList.add("ship");
-          }
-
-          playerBoardDiv.appendChild(colButton);
-        });
-      });
-    };
-
-    const updateComputerBoard = () => {
-      computerBoardDiv.textContent = "";
-      const board = game.getBoards().computerBoard.getBoard();
-
-      board.forEach((row, rowIndex) => {
-        row.forEach((col, colIndex) => {
-          const colButton = document.createElement("button");
-          colButton.classList.add("cell");
-
-          colButton.dataset.row = rowIndex;
-          colButton.dataset.column = colIndex;
-          colButton.textContent =
-            col === "hit" ? "X" : col === "miss" ? "O" : "";
-          computerBoardDiv.appendChild(colButton);
-        });
-      });
-    };
-
-    updateComputerBoard();
-    updatePlayerBoard();
+    updatePlayerBoard(game.getBoards().playerBoard.getBoard());
+    updateComputerBoard(game.getBoards().computerBoard.getBoard());
   };
 
   const clickHandler = (e) => {
@@ -58,13 +18,57 @@ export function screenController() {
     const selectedColumn = e.target.dataset.column;
 
     if (!selectedColumn || !selectedRow) return; // prevents from clicking the edges;
+    if (!gameStarted) return; // prevents from clicking if start hasn't been clicked
+    const message = game.playRound(selectedColumn, selectedRow);
 
-    game.playRound(selectedColumn, selectedRow);
+    if (message) {
+      updateBoards();
+      endGame(message);
+      return;
+    }
+
     updateBoards();
   };
 
-  playerBoardDiv.addEventListener("click", clickHandler);
   computerBoardDiv.addEventListener("click", clickHandler);
+
+  const resetPlayerBoard = () => {
+    game.refreshPlayerBoard();
+    updateBoards();
+  };
+
+  const refreshPlayerBoardBtn = document.querySelector(".refresh-player-board");
+  refreshPlayerBoardBtn.addEventListener("click", resetPlayerBoard);
+
+  const startGame = () => {
+    const refreshPlayerBoardBtn = document.querySelector(
+      ".refresh-player-board"
+    );
+    refreshPlayerBoardBtn.remove();
+    gameStarted = true;
+  };
+
+  const startGameBtn = document.querySelector(".start-game");
+  startGameBtn.addEventListener("click", startGame);
+
+  const restartGame = () => {
+    const refreshPlayerBoardBtn = document.createElement("button");
+    refreshPlayerBoardBtn.classList.add("refresh-player-board");
+    refreshPlayerBoardBtn.textContent = "Refresh Board";
+    refreshPlayerBoardBtn.addEventListener("click", resetPlayerBoard);
+
+    const playerBoardSection = document.querySelector(".player-section");
+    playerBoardSection.appendChild(refreshPlayerBoardBtn);
+    hidePopup();
+    gameStarted = false;
+    updateBoards();
+  };
+
+  const endGame = (message) => {
+    showPopup(message);
+    const restartBtn = document.querySelector(".restart-game");
+    restartBtn.addEventListener("click", restartGame);
+  };
 
   updateBoards();
 }

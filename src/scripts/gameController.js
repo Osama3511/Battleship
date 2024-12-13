@@ -1,6 +1,6 @@
 import { Player } from "./player";
 import { Computer } from "./computer";
-import { checkGameOver } from "./helperFunctions";
+import { checkGameOver} from "./helperFunctions";
 
 export function GameController() {
   const player = Player();
@@ -19,41 +19,29 @@ export function GameController() {
     console.log(computerBoard);
   };
 
-  const placePlayerShips = () => {
-    player.placeOwnShip(0, 0, player.ships.battleShip, "vertical");
-    player.placeOwnShip(1, 1, player.ships.submarine, "vertical");
-    player.placeOwnShip(2, 2, player.ships.carrier, "vertical");
-    player.placeOwnShip(3, 3, player.ships.cruiser, "vertical");
-    player.placeOwnShip(4, 4, player.ships.destroyer, "vertical");
-  };
+  player.placeOwnShip();
+  computer.placeOwnShip();
 
-  placePlayerShips();
-
-  const placeComputerShips = () => {
-    computer.placeOwnShip();
-  };
-
-  placeComputerShips();
   printBoards();
 
   const resetGame = () => {
     player.resetBoard();
     computer.resetBoard();
 
-    placeComputerShips();
-    placePlayerShips();
+    player.placeOwnShip();
+    computer.placeOwnShip();
 
     printBoards();
   };
 
   const playRound = (x, y) => {
-    if(!player.attack(x, y, computerGameBoard)) return;
+    if (!player.attack(x, y, computerGameBoard)) return;
 
     if (checkGameOver(computerGameBoard)) {
       printBoards();
       console.log("Player wins!!!");
       resetGame();
-      return true;
+      return "player";
     }
 
     computer.attack(playerGameBoard);
@@ -62,20 +50,26 @@ export function GameController() {
       printBoards();
       console.log("Computer wins!");
       resetGame();
-      return true;
+      return "computer";
     }
 
     printBoards();
+    return null;
   };
 
   const getBoards = () => {
     return { playerBoard: playerGameBoard, computerBoard: computerGameBoard };
   };
 
+  const refreshPlayerBoard = () => {
+    player.resetBoard();
+    player.placeOwnShip();
+  };
 
   return {
     playRound,
     resetGame,
     getBoards,
+    refreshPlayerBoard,
   };
 }
